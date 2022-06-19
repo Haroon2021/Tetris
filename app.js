@@ -67,6 +67,15 @@ function undraw() {
 //Make the tetrominos move down every second (or any other time interval)
 timerId = setInterval(moveDown,1000)
 
+// assign function to keycodes 
+// (keycodes help work out what button is being pressed): https://www.toptal.com/developers/keycode/for/arrow-down
+function control(e) {
+  if(e.keyCode === 37) {      // Keycode 37 is the left arrow key
+    moveLeft()
+  }
+}
+document.addEventListener('keyup', control)
+
 function moveDown() {
   undraw()
   currentPosition += width
