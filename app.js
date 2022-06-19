@@ -44,17 +44,61 @@ document.addEventListener("DOMContentLoaded", () => {
   const theTetrominos = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino]
 
   let currentPosition = 4;
-  let current = theTetrominos[0][0]
+  let currentRotation = 0;
 
-  // Draw the first rotation in the first tetromino
+  // Randomly add a tetromino
+  let random = Math.floor(Math.random()*theTetrominos.length)
+  let current = theTetrominos[random][currentRotation]
 
+  // Draw the tetromino
   function draw() {
     current.forEach(index => {
       squares[currentPosition + index].classList.add('tetromino')
     })
   }
 
-  draw()
+// Undraw the Tetromino
+function undraw() {
+  current.forEach(index => {
+    squares[currentPosition + index].classList.remove('tetromino')
+  })
+}
 
+//Make the tetrominos move down every second (or any other time interval)
+timerId = setInterval(moveDown,1000)
+
+function moveDown() {
+  undraw()
+  currentPosition += width
+  draw()
+  freeze()
+}
+
+// Freeze function 
+
+function freeze() {
+  if(current.some(index => squares[currentPosition + index + width].classList.contains('taken'))) {
+    current.forEach(index => squares[currentPosition + index].classList.add('taken'))
+    // Start a new Tetromino from falling
+    random = Math.floor(Math.random() * theTetrominos.length)
+    current = theTetrominos[random][currentRotation]
+    currentPosition = 4
+    draw()
+  }
+}
+
+// Move the tetromino left unless it is at the edge or there is a blockage
+function moveLeft() {
+  undraw()
+  const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
+
+  if(!isAtLeftEdge) currentPosition -= 1
+
+  if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+    currentPosition += 1
+  }
+
+  draw()
+}
 
 })
