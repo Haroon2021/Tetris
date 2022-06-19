@@ -68,10 +68,16 @@ function undraw() {
 timerId = setInterval(moveDown,1000)
 
 // assign function to keycodes 
-// (keycodes help work out what button is being pressed): https://www.toptal.com/developers/keycode/for/arrow-down
+// (keycodes help work out what button is being pressed): https://www.toptal.com/developers/keycode/for/arrow-up
 function control(e) {
   if(e.keyCode === 37) {      // Keycode 37 is the left arrow key
     moveLeft()
+  } else if (e.keyCode === 38) {  // Keycode 38 is the up key
+    rotate()
+  } else if (e.keyCode === 39) {
+    moveRight()
+  } else if (e.keyCode === 40) {
+    moveDown()
   }
 }
 document.addEventListener('keyup', control)
@@ -109,5 +115,32 @@ function moveLeft() {
 
   draw()
 }
+
+// Move the tetromino to the right, unless it is at the right wall or there is a blockage
+
+function moveRight() {
+  undraw()
+  const isAtRightEdge = current.some( index => (currentPosition + index ) % width === width - 1)
+
+  if(!isAtRightEdge) currentPosition += 1
+
+  if(current.some(index => squares[currentPosition + index ].classList.contains('taken'))) {
+    currentPosition -= 1
+  }
+  draw()
+}
+
+//Rotate the tetromino
+function rotate() {
+  undraw()
+  currentRotation ++
+  if(currentRotation === current.length) { // if the current rotation is 4 make it go back to 0
+    currentRotation = 0
+  }
+  current = theTetrominos[random][currentRotation]
+  draw()
+}
+
+
 
 })
