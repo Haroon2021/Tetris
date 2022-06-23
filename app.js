@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     const grid = document.querySelector('.grid');
     let squares = Array.from(document.querySelectorAll('.grid div'));   // Array.from function puts all the divs into an array
-    const ScoreDisplay = document.querySelector('#score');
-    const StartBtn = document.querySelector('#start-button');
+    const scoreDisplay = document.querySelector('#score');
+    const startBtn = document.querySelector('#start-button');
     const width = 10;
     let nextRandom = 0;
+    let timerId ;    // This lets the timer Id be null
 
     //The Tetrominoes
   const lTetromino = [
@@ -98,7 +99,6 @@ function freeze() {
     // Start a new Tetromino from falling
 
     random = nextRandom
-
     nextRandom = Math.floor(Math.random() * theTetrominos.length)
     current = theTetrominos[random][currentRotation]
     currentPosition = 4
@@ -168,10 +168,28 @@ function displayShape() {
   })
   
   upNextTetrominoes[nextRandom].forEach( index => {
-
     displaySquares[displayIndex + index].classList.add('tetromino')
   })
 }
+
+// Add functionality to the start button
+startBtn.addEventListener('click', () => {
+  if (timerId) {
+    clearInterval(timerId)
+    timerId = null
+  } else {
+    draw()
+    timerId = setInterval(moveDown, 1000)
+    nextRandom = Math.floor(Math.random()*theTetrominos.length)
+    displayShape()
+  }
+})
+
+
+
+
+
+
 
 
 })
