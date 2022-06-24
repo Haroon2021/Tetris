@@ -99,13 +99,14 @@ function freeze() {
     current.forEach(index => squares[currentPosition + index].classList.add('taken'))
     // Start a new Tetromino from falling
 
-    random = nextRandom
-    nextRandom = Math.floor(Math.random() * theTetrominos.length)
-    current = theTetrominos[random][currentRotation]
-    currentPosition = 4
-    draw()
-    displayShape()
+    random = nextRandom;
+    nextRandom = Math.floor(Math.random() * theTetrominos.length);
+    current = theTetrominos[random][currentRotation];
+    currentPosition = 4;
+    draw();
+    displayShape();
     addScore();
+    gameOver();
   }
 }
 
@@ -206,11 +207,15 @@ function addScore() {
   }
 }
 
+//Gameover function
 
+function gameOver() {
+  if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+    scoreDisplay.innerHTML = 'end'
+    clearInterval(timerId)
+  }
 
-
-
-
+}
 
 
 })
